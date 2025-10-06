@@ -1,0 +1,664 @@
+---
+title: "Turnover Sector Analysis"
+author: "Adam McMahan"
+date: "2025-03-01"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(readxl)
+library(writexl)
+library(DiagrammeR)
+library(DiagrammeRsvg)
+library(rsvg)
+library(psych)
+library(lubridate)
+```
+
+
+# Introduction
+## Background and Purpose
+
+Turnover is a natural occurrence all organizations handle when managing
+employees. Turnover is usually predicted by turnover intention metrics and 
+typically occur at the end of the employee life cycle. These include burnout,
+emotional exhaustion, job stress, career plateau, organizational commitment,
+person-organizational fit, career commitment, work engagement, job satisfaction,
+and job embeddedness (Kim & Kim, 2021). Turnover can occur by
+quitting, termination, internal mobility, and loss of life among others. 
+Turnover is typically measured by internal metrics which allow organizations
+to better predict how to handle an increase or a decrease of turnover rates.
+
+Various factors can contribute internally to why an employee may leave their 
+post, however there is not much data on how external variables may impact 
+turnover. For example, with the recent wild fires in the Los Angeles area, 
+many people now face the decision of delaying retirement, suddenly moving 
+across country, or whatever choice best benefits them in that moment. 
+
+Research in Gartner or The Conference Board lacks such an understanding of 
+how events impact turnover. It would be imperative to understand how 
+significant events impact employees and their separation from the organization. 
+
+## Conceptual Framework
+
+The present research is designed to analyze three different sectors and their
+turnover rates aiming to identify any trends over the last decade. Specifically,
+the question here will see if major events have impact on turnover. This
+research will be examining the turnover rates of Federal, Healthcare, and 
+Hospitality employees. According the the U.S. Bureau of Labor Statistics, as of
+2023, the Federal government had 2.9 million employees, Healthcare had 21.5 
+million, and Hospitality had 16.6 million (BLS). Additionally, this research 
+will analyze significant events that may indicate how various events may effect
+turnover as well.
+
+The following framework highlights an event with a mediating variable of 
+sector and how it impacts turnover. In this research study, the event is 
+identified as a month, year, or both month and year.
+
+### Framework
+
+```{r echo=FALSE}
+graph <- grViz("
+digraph conceptual_framework {
+  rankdir=LR;
+  node [fontname = Helvetica, shape = box, style = solid, color = lightblue, fontcolor = black]
+  Turnover [label = 'Turnover']
+
+  node [shape = ellipse, style = solid, color = black, fontcolor = black]
+  Event [label = 'Event']
+  Sector [label = 'Sector']
+
+  Event -> Sector
+  Sector -> Turnover
+}
+")
+
+svg <- export_svg(graph)
+pdf_file <- "conceptual_framework.pdf"
+rsvg_pdf(charToRaw(svg), pdf_file)
+
+knitr::include_graphics("conceptual_framework.pdf")
+```
+
+
+# Reserach Questions
+
+The following questions are designed to help distinguish the three sectors 
+individually, and identify how events may impact their sectors. The questions 
+considered how events may be impacted by health crises, political ideologies, 
+tourism, and terrorism. 
+
+## 1) Are there any similar trends between the three sectors in reported turnover?
+
+This question would help to identify any general similarities between the 
+sectors with their turnover rates. Additionally identifying differences as well
+for use in the final research question.
+
+Hypothesis 1: The three sectors are significantly different. 
+
+## 2) It is likely that COVID-19 had an effect on turnover rates. Is this easily identifiable? 
+
+This question would aim to understand turnover during a health crises. By reviewing trends in 2020, it would identify how the sectors reacted to COVID-19.
+
+Hypothesis 2: Tourism has a significant negative correlation in the first 4 months, having higher turnover rates. 
+
+Hypothesis 3: Healthcare has a significant negative correlation in the first 4 months, having lower turnover rates.
+
+## 3) 2019 and 2023 were the beginning of a new Congress during a President's term where the sitting President lost seats of their respected party. Did this year see any changes in turnover? 
+
+This question examines how political differences may impact turnover rate. By 
+having two points in recent history where the party of a President has changed, 
+it may be possible to see the same significance repeated. 
+
+Hypothesis 4: Federal workers saw similar significant and positive
+correlations where a new Congress sat (2019 and 2023).
+
+Hypothesis 5: Healthcare workers saw similar significant and positive 
+correlations where a new Congress sat (2019 and 2023). 
+
+## 4) In 2015, ISIS threats were on the rise with terrorist attacks in Paris. Were there any significant changes seen?
+
+Terrorism is known to have an impact on various sectors. With the threat of 
+ISIS during that time period, this question aims to identify how the threat of
+terror could have impacted turnover. 
+
+Hypothesis 6: Federal workers saw a a significant increase in turnover.
+
+Hypothesis 7: Hospitality workers saw a significant increase in turnover. 
+
+## 5) Was there any significant difference between the sectors during these events, and why could they be different? 
+
+This question will look back on the analyses of the overall research to
+identify key differences between the sectors and these events. No further 
+statistical analysis will be ran. 
+
+# Methods
+
+## Data Collection
+
+Data was pulled from the U.S. Bureau of Statistics by filtering down between 
+the three sectors and uploading each file into an Excel spreadsheet. Each of 
+the data share the same parameters of "all size classes", "level - in 
+thousands". These will then be loaded into R for analysis.
+
+## R and R Studio
+
+Data analysis will be ran with R (v. 4.4.2) using RStudio (v. 2024.12.1+563). 
+Within the program, various packages will be used allowing for high-level data
+cleaning and visualizations. These outputs will be used to help answer the 
+research questions as described above by providing detailed insights on their 
+significance, correlations, and trends. 
+
+## Packages
+
+### tidyverse
+
+tidyverse will be used as it is common within the Data Science field.
+Additionally, tidyverse works well with other packages, improving data 
+manipulation and data visualization. 
+
+### ggplot2
+
+ggplot2 will be used for its plotting function when creating plots and tables. 
+This will allow for the creation of better visualizations that are aimed at 
+more easily sharing insights. 
+
+### dplyr
+
+dplyr will be used for any data manipulation. For example, piping will be used
+to help mutate the data for analysis. 
+
+### readxl and writexl
+
+readxl and writexl will be used to read and write with the .xlsx files for 
+loading and to have an excel file saved. This new file will be created in case 
+the code breaks and debugging needs to take place within the file itself, or to 
+help search for blank cells or any other code-breaking attributes. 
+
+### DiagrammeR, Diagrammersvg, rsvg
+
+The packages are being used to help illustrate the conceptual framework of the
+research study. DiagrammeR uses Graphviz to help create images, and the other
+two packages help the knit process so it can fit into an .Rmd file. 
+
+### psych
+
+The psych package will be used to help gather descriptive statistics. The psych
+package also provides skew and kurtosis values, which will be used to determine
+any outliers. 
+
+## Variables 
+
+### Turnover (DV, labled as "Employees")
+
+Turnover, as aforementioned, is part of the employee life cycle and is
+predicted by turnover intention. In this study, it is represented by the number 
+of employees (in thousands) as provided by theU.S. Bureau of Labor Statistics.
+
+Employees, or number of employees turning over, is the Dependent Variable (DV) 
+in the present research. This variable is important for the analysis because 
+the values provided will help measure the effects of the IV's, and are used 
+in data visualization to identify trends. 
+
+### Sector (Mediating Variable, labeled "category")
+
+This variable represents the three sectors chosen for the analysis: Federal, 
+Health Care, and Hospitality. Each sector was selected due to different 
+populations within each, the differences between each sector that are assumed
+by the general population (i.e., general or common knowledge), and are not 
+bound by any bio data or demographics. These reasons are why they were selected 
+to analyze turnover. 
+
+### Event (labeled as "Year", "Month", or "Year_Month")
+
+The "Year" variable will be used to help assess employee turnover over time. 
+In some instances it may be used on its own. In others, it may be used in 
+conjunction with the variable "Month" through data manipulation creating a new
+variable. 
+
+The "Month" variable will be used to help assess employee turnover over time. 
+In some instances it may be used on its own. In others, it may be used in 
+conjunction with the variable "Year" through data manipulation creating a new
+variable. 
+
+This variable will be created through data manipulation, . These
+variables will be transformed to create one column using "pivot_longer()".
+Additionally, a new variable will be created to help maintain chronological 
+order within the data set. This will be done by joining the variables "Month" 
+and "Year", utilizing "mutate()".
+
+## Plots and Charts
+
+Plots and tables needed would be utilize to help identify meaningful insights 
+that are not self-evident from the raw data. These plots and charts will be
+helpful when examining specific periods of time, as a full data plot with all 
+data points would be too congested to share key takeaways and significant
+findings.Primarily a scatter plot will be used to identify trends with each
+sector being plotted against employee turnover over time. 
+
+## Analyses
+
+### ANOVA
+
+ANOVA, or Analysis of Variance, testing will be useful as it will provide both 
+an F-statistic and a p-value. The F-statistics will help identify if there are 
+any differences between the threes sectors. Depending on the outcome, a high 
+F-statistic will be useful in this research because it will demonstrate that 
+the three sectors are in fact different. 
+
+The p-value identified in the ANOVA testing will determine the significance of 
+the overall anova analysis. Here, even if the F-statistic is high, if the data 
+is insignificant, the insights will have to reflect that result. 
+
+### Regression
+
+Regression analysis will be used because of its ability to regress towards the
+mean (Darlington & Hayes, 2016). In other words, it allows the researcher to 
+understand how the DV changes when an IV varied or fixed. This allows for more
+meaningful conclusions and decision making. In the context of this study, 
+regression will analyze the DV, employee turnover,and how it changes during 
+certain period of time against a fixed sector.  
+
+# Code and Results
+
+## Organize Data
+
+### Read and Mutate Files
+
+Reading files and adding appropriate category. In order to best utilize the 
+data sets, the data will use the various functions within the libraries listed 
+above. After loading in the the libraries and data sets, the mutate function 
+from the "dplyr" package. This will be used when creating the columns in later
+steps. 
+
+```{r}
+dataFederal <- read_excel(
+  paste0("C:\\Users\\Adam\\OneDrive\\Desktop\\Bellevue\\",
+         "SeriesReport-Federal.xlsx")) %>%
+  mutate(category = "Federal")
+
+dataHealthCare <- read_excel(
+  paste0("C:\\Users\\Adam\\OneDrive\\Desktop\\Bellevue\\",
+         "SeriesReport-Health Care.xlsx")) %>%
+  mutate(category = "HealthCare")
+
+dataHospitality <- read_excel(
+  paste0("C:\\Users\\Adam\\OneDrive\\Desktop\\Bellevue\\",
+         "SeriesReport-Hospitality.xlsx")) %>%
+  mutate(category = "Hospitality")
+```
+### Combine Files and Data Mutation
+
+Combining files and pivoting the months to be a single variable. Additionally, 
+mutating a new variable through "paste()" to create Year_Month. Last, mutating
+data to help maintain chronological order. This will help with primarily with 
+data visualization and analysis. 
+
+Additionally, to help with regression analysis, the Year_Month column will be 
+parsed to a YYYY-MM-DD format so R can analyse the data properly. 
+
+```{r}
+dataTurnover <- bind_rows(dataFederal, dataHealthCare, dataHospitality)
+
+month_columns <- c(
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+dataCleaned <- dataTurnover %>%
+  pivot_longer(cols = all_of(month_columns), names_to = "Month", values_to = "Employees")
+
+dataCleaned <- dataCleaned %>%
+  mutate(Year_Month = paste(Year, Month))
+
+dataCleaned <- dataCleaned %>%
+  mutate(Year_Month = factor(Year_Month, 
+    levels = unique(Year_Month[order(Year, match(Month, month.abb))])))
+
+dataCleaned <- dataCleaned %>%
+  mutate(Year_Month = parse_date_time(Year_Month, orders = "ym"))
+```
+
+### Write New Excel File
+
+This step saves the new data frame as its own .xlsx file. It is important to do 
+this step as a means to come back to the research at a later time, or have it 
+available if it is requested by another researcher. 
+
+```{r}
+write_xlsx(dataCleaned, "C:\\Users\\Adam\\OneDrive\\Desktop\\Bellevue\\Cleaned Turnover Data.xlsx")
+```
+
+### Check Data
+
+Note: Employees in thousands. 
+
+
+```{r}
+head(dataCleaned, 5)
+print(nrow(dataCleaned))
+```
+# Analysis
+
+## Descriptive Statistics
+
+This is being ran for understand the general statistics about the data set. This
+will be used to better understand the data being worked with. 
+
+```{r}
+describe(dataCleaned)
+```
+
+
+## ANOVA Testing
+
+```{r}
+anova_result <- aov(Employees ~ category + Year_Month, data = dataCleaned)
+summary(anova_result)
+
+summary_data <- dataCleaned %>%
+  group_by(Year_Month, category) %>%
+  summarize(mean_value = mean(Employees), sd_value = sd(Employees), .groups = 'drop')
+```
+
+## Regression Analysis 
+
+### COVID-19
+
+The analysis period for COVID-19 that will be used for analysis will be February
+2020 through May 2020. This 4 month range will be used because to consider 
+the turnover trend before COVID-19's impact on the United states. The length of
+of four months is being used to study the immediate effects of an event. It 
+should be noted that this same lenght will be used consistently throughout the
+study. 
+
+Hospitality and Health Care were chosen to as both industries had different 
+responses. For example, The Walt Disney Company shut down its theme parks 
+(Pallotta, 2020) while health care facilities, considered to be an essential 
+need, had to re-organizedaily operations. 
+
+#### Health Care
+
+```{r}
+start_date <- ymd("2020-02-01")
+end_date <- ymd("2020-05-01")
+
+covidHC_data<- dataCleaned %>%
+  filter(category == "HealthCare" & Year_Month >= start_date & Year_Month <= end_date)
+
+covidHC_model <- lm(Employees ~ Year_Month, data = covidHC_data)
+
+summary(covidHC_model)
+
+ggplot(covidHC_data, aes(x = Year_Month, y = Employees)) +
+  geom_point() + # Plot the actual data points
+  geom_smooth(method = "lm", col = "blue") +
+  labs(title = "Regression of Employees During COVID-19",
+       x = "Year_Month",
+       y = "Employees") +
+  theme_minimal() + #
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+#### Hospitality
+
+```{r}
+start_date <- ymd("2020-02-01")
+end_date <- ymd("2020-05-01")
+
+covidHo_data<- dataCleaned %>%
+  filter(category == "Hospitality" & Year_Month >= start_date & Year_Month <= end_date)
+
+covidHo_model <- lm(Employees ~ Year_Month, data = covidHo_data)
+
+summary(covidHo_model)
+
+ggplot(covidHo_data, aes(x = Year_Month, y = Employees)) +
+  geom_point() + 
+  geom_smooth(method = "lm", col = "blue") +
+  labs(title = "Regression of Employees During COVID-19",
+       x = "Year_Month",
+       y = "Employees") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+### Congressional Impacts
+
+This analysis will contain 4 regression models; two for 2019 for the selected sectors and 2 for 2023. The range for this will be 4 months, from January to April of the selected years. 
+
+#### 2019 Federal
+
+```{r}
+start_date <- ymd("2019-01-01")
+end_date <- ymd("2019-04-01")
+
+congressF_data<- dataCleaned %>%
+  filter(category == "Federal" & Year_Month >= start_date & Year_Month <= end_date)
+
+congressF_model <- lm(Employees ~ Year_Month, data = congressF_data)
+
+summary(congressF_model)
+
+ggplot(congressF_data, aes(x = Year_Month, y = Employees)) +
+  geom_point() + 
+  geom_smooth(method = "lm", col = "blue") +
+  labs(title = "Regression of Employees During Congressional Change",
+       x = "Year_Month",
+       y = "Employees") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+#### 2019 Health Care
+
+```{r}
+start_date <- ymd("2019-01-01")
+end_date <- ymd("2019-04-01")
+
+congressHC_data<- dataCleaned %>%
+  filter(category == "HealthCare" & Year_Month >= start_date & Year_Month <= end_date)
+
+congressHC_model <- lm(Employees ~ Year_Month, data = congressHC_data)
+
+summary(congressHC_model)
+
+ggplot(congressHC_data, aes(x = Year_Month, y = Employees)) +
+  geom_point() + 
+  geom_smooth(method = "lm", col = "blue") +
+  labs(title = "Regression of Employees During Congressional Change",
+       x = "Year_Month",
+       y = "Employees") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+#### 2023 Federal
+
+```{r}
+start_date <- ymd("2023-01-01")
+end_date <- ymd("2023-04-01")
+
+congressF2_data<- dataCleaned %>%
+  filter(category == "Federal" & Year_Month >= start_date & Year_Month <= end_date)
+
+congressF2_model <- lm(Employees ~ Year_Month, data = congressF2_data)
+
+summary(congressF2_model)
+
+ggplot(congressF2_data, aes(x = Year_Month, y = Employees)) +
+  geom_point() + 
+  geom_smooth(method = "lm", col = "blue") +
+  labs(title = "Regression of Employees During Congressional Change",
+       x = "Year_Month",
+       y = "Employees") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+#### 2023 Health Care
+
+```{r}
+start_date <- ymd("2023-01-01")
+end_date <- ymd("2023-04-01")
+
+congressHC2_data<- dataCleaned %>%
+  filter(category == "HealthCare" & Year_Month >= start_date & Year_Month <= end_date)
+
+congressHC2_model <- lm(Employees ~ Year_Month, data = congressHC2_data)
+
+summary(congressHC2_model)
+
+ggplot(congressHC2_data, aes(x = Year_Month, y = Employees)) +
+  geom_point() + 
+  geom_smooth(method = "lm", col = "blue") +
+  labs(title = "Regression of Employees During Congressional Change",
+       x = "Year_Month",
+       y = "Employees") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+### 2015 Terror Attacks
+
+
+#### Hospitality
+
+```{r}
+start_date <- ymd("2015-11-01")
+end_date <- ymd("2016-02-01")
+
+terrorHo_data<- dataCleaned %>%
+  filter(category == "Hospitality" & Year_Month >= start_date & Year_Month <= end_date)
+
+terrorHo_model <- lm(Employees ~ Year_Month, data = terrorHo_data)
+
+summary(terrorHo_model)
+
+ggplot(terrorHo_data, aes(x = Year_Month, y = Employees)) +
+  geom_point() + 
+  geom_smooth(method = "lm", col = "blue") +
+  labs(title = "Regression of Employees During Terror Attacks",
+       x = "Year_Month",
+       y = "Employees") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+#### Federal
+```{r}
+start_date <- ymd("2015-11-01")
+end_date <- ymd("2016-02-01")
+
+terrorF_data<- dataCleaned %>%
+  filter(category == "Federal" & Year_Month >= start_date & Year_Month <= end_date)
+
+terrorF_model <- lm(Employees ~ Year_Month, data = terrorF_data)
+
+summary(terrorF_model)
+
+ggplot(terrorF_data, aes(x = Year_Month, y = Employees)) +
+  geom_point() + 
+  geom_smooth(method = "lm", col = "blue") +
+  labs(title = "Regression of Employees During Terror Attacks",
+       x = "Year_Month",
+       y = "Employees") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+# Results
+
+## Descriptive Statistics 
+
+The descriptive statistics reveal that within the data set (n = 396) skewness
+and kurtosis are minimal to zero. This reveals that the data is evenly 
+distributed with minimal outliers to consider. The data is also platykurtic in 
+nature.
+
+Additionally, the high standard error of the variable employee turnover reveals
+that there is higher variability, meaning that it may not represent the 
+population accurately. 
+
+## ANOVA 
+
+The results of the ANOVA test show that both Category (F=3365, p=.00) and 
+Year_Month (F=2.85, p=.00) have strong effects on turnover rates. 
+
+## COVID-19 - Health Care
+
+The analysis here demonstrates that there is a significant negative correlation (p=<.05) between employee turnover and the start of COVID-19 within the Heath Care sector. The r^2 value suggest that the model is strong (r^2=.88). However, it should be noted that there is some variability (se=18.97), suggesting that other variables should be considered. This would partially support hypothesis 2. 
+
+## COVID-19 - Hospitality
+
+The analysis here demonstrates that there is no significant relationship (p>.05) between employee turnover and the start of COVID-19 within the Hospitality sector.The r^2 value suggest that the model is a strong (r^2=.78). However, it should be noted that there is a large potential for variability (se=81.42), and it would be highly recommended to consider other variables. This would not support hypothesis 3. 
+
+## Congress - 2019 - Federal
+
+The analysis here demonstrates that there is no significant relationship (p>.05) between employee turnover and the start of a new Congress where the Houses flipped within the Federal sector. The r^2 value suggest that the model is not strong (r^2=-.39). Additionally, despite the lower standard error than those found in the COVID-19 tests, the standard error here (se=3.78) does not compensate for the lack of significance found.This model would not be a reliable measure of employee turnover here.
+
+## Congress - 2019 - Health Care
+
+The analysis here demonstrates that there is no significant relationship (p>.05) between employee turnover and the start of a new Congress where the Houses flipped within the Health Care sector. The r^2 value suggest that the model is not strong (r^2=-.07). Additionally, the standard error here (se=16.94) would suggest that other variables should be considered. This model would not be a reliable measure of employee turnover.
+
+## Congress - 2023 - Federal
+
+The analysis here demonstrates that there is no significant relationship (p>.05) between employee turnover and the start of a new Congress where the Houses flipped within the Federal sector. The r^2 value suggest that the model is not strong (r^2=.15). Additionally, despite the lower standard error similar to the 2019 Federal outputs, the standard error here (se=.88) does not compensate for the lack of significance found. This model would not be a reliable measure of employee turnover here. This would not support hypothesis 4.
+
+## Congress 2023 - Health Care
+
+The analysis here demonstrates that there is no significant relationship (p>.05) between employee turnover and the start of a new Congress where the Houses flipped within the Health Care sector. The r^2 value suggest that the model is not strong (r^2=.55). Additionally, the standard error here (se=20.79) would suggest that other variables should be considered. This model would not be a reliable measure of employee turnover. This would not support hypothesis 5. 
+
+## 2015 Terror Attacks - Hospitality
+
+The analysis here demonstrates that there is no significant relationship (p>.05) between employee turnover and the Paris Terror Attacks in the Hospitality sector. The r^2 value suggest that the model is not strong (r^2=-.14). Additionally, the standard error here (se=16.99) would suggest that other variables should be considered. This model would not be a reliable measure of employee turnover.This would not support hypothesis 6. 
+
+## 2015 Terror Attacks - Federal
+
+The analysis here demonstrates that there is no significant relationship (p>.05) between employee turnover and the Paris Terror Attacks in the Federal sector. The r^2 value suggest that the model is not strong (r^2=.19). Additionally, the standard error here (se=1.54) does not compensate for the lack of significance found. This model would not be a reliable measure of employee turnover here. This would not support hypothesis 7. 
+
+# Discussion
+
+Overall, the present question was to determine if events had any impact on employee turnover. The results here indicate that though it is possible for events to have impact on turnover, it is likely not. Additionally, even where events are significant, other variables should be considered. Reviewing the analysis of the ANOVA testing, hypothesis 1 would be supported in that all three sectors are significantly different.However, it is likely that other variables are involved. 
+
+Within this research only one analysis had a good model fit and was statistically significant. Though it is unsurprising that COVID-19 had such a significant impact on Health Care workers, it is surprising that other events showed little significance or suggested more variables be considered. For example,in 2019, laws were enacted that impacted the Health Care industry. According to an article by the National Law Review, there were 4 laws passed that had effects on the industry (Bhupathy & Eliav, 2020). However, those laws would had to be enacted within the period of time span from the event as set within the research parameters.
+
+# Implications
+
+Though the data did not primarily support that events alone have an impact on turnover rates, it would still be important for organizations to analyze the turnover after events to determine the impact, if any. 
+
+Theoretically, future studies should consider including other variables when determining how events can impact employees. For example, engagement could be considered a variable as it is known to predict turnover (Collini et al., 2013). However one key difference in this study would be that they used turnover intention. The present study used the data of turnover that occurred. Turnover intention may not always result in turnover should an organization address it. Future studies on this subject should consider using turnover intent. Such a variable may also solve for the additional need variables of variables as suggested by the standard error values throughout. 
+
+# Limitations
+
+One limitation in this study is the researchers lack of knowledge in using R. Though the research heavily relied on regression, other methods were not immediately thought of due to lack of knowledge of how they would work in R at such a level. 
+
+Additionally, the data collected was undefined as what was included in each sector. For example, the hospitality industry can includes both hotels and theme parks. Hotels remained open during COVID-19 to help out essential workers as a method of keeping social distancing and protecting those workers families. Conversely, theme parks were closed and were not consistent in re-opening. 
+
+# Conluding Remarks 
+
+The study explored how events, such as pandemics, terror attacks, and political shifts, could impact employee turnover. It was found that though each sector was significantly different, the events themselves were not always a plausible cause of turnover. The one exception in this study was the Health Care sector at the beginning of the COVID-19 pandemic, however it is likely that other variables may have been contributing factors. 
+
+Despite the outcomes here, they still shared the importance to continue to study how events can impact turnover. Additionally, the study here provided insight for future researchers on how to approach the question. 
+
+With the increase in both quantity and devastation of natural disasters, and the increase of political discourse globally, it would be important to continue to pursue this research to better understand employees during tumultuous times, with the goal of mitigating turnover. 
+
+# References
+
+Bhupathy, V., & Eliav, D. R. (2020, January 10). 2019 year in review: Notable changes in law, policy, and enforcement of HIPAA. Legal News & Business Law News. https://natlawreview.com/article/2019-year-review-notable-changes-law-policy-and-enforcement-hipaa#google_vignette 
+
+Bureau of Labor Statistics. (n.d.). Employment Projections. https://www.bls.gov/emp/tables/employment-by-major-industry-sector.htm
+
+Bureau of Labor Statistics. (n.d.) Job Openings and Labor Turnover Surveys (JOLTS): Data. https://www.bls.gov/jlt/data.htm
+
+Collini, S. A., Guidroz, A. M., Perez, L. M., (2013, October 04). Turnover in health care: The mediating effects of employee engagement. Journal of Nursing.
+
+Darlington, R. B., & Hayes, A. F. (2016). Regression analysis and linear models: Concepts, applications, and implementation. Guilford Publications.
+
+Kim, H., & Kim, E. G. (2021). A meta‐analysis on predictors of turnover intention of hospital nurses in South Korea (2000–2020). Nursing Open, 8(5), 2406-2418.
+
+Pallotta, F. (2020, March 13). Walt Disney World closes, paralyzing the company’s Tourism Empire | CNN business. CNN. https://www.cnn.com/2020/03/12/media/disney-world-close-coronavirus/index.html 
