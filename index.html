@@ -13,21 +13,36 @@
       padding: 2rem;
     }
 
-    header {
-      text-align: center;
+    .header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
       margin-bottom: 3rem;
+      text-align: left;
     }
 
-    h1 {
+    .profile-pic {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #aeefff;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .header-text h1 {
       font-size: 3rem;
-      margin-bottom: 0.3rem;
+      margin: 0;
       color: #ffffff;
       text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
     }
 
-    p {
+    .header-text p {
       line-height: 1.6;
       font-size: 1.1rem;
+      margin: 0.5rem 0 0;
     }
 
     h2 {
@@ -92,11 +107,13 @@
   </style>
 </head>
 <body>
-  <header>
-  <img src="profile.jpg" alt="Adam McMahan profile photo" class="profile-pic" />
-  <h1>Adam McMahan</h1>
-  <p>Strategic Analyst | Graduate Member, British Psychological Society</p>
-</header>
+  <header class="header-flex">
+    <img src="profile.jpg" alt="Adam McMahan profile photo" class="profile-pic" />
+    <div class="header-text">
+      <h1>Adam McMahan</h1>
+      <p>Strategic Analyst | Graduate Member, British Psychological Society</p>
+    </div>
+  </header>
 
   <section>
     <h2>About Me</h2>
