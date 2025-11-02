@@ -23,13 +23,13 @@
       text-align: left;
     }
 
-    .profile-pic {
-      width: 120px;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 2px solid #aeefff;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    .header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      text-align: center;
+      margin-bottom: 2rem;
     }
 
     .header-text h1 {
@@ -115,7 +115,7 @@
 </head>
 <body>
   <header class="header-flex">
-    <img src="profile.jpg" alt="Adam McMahan profile photo" class="profile-pic" />
+    <img src="profile.jpg" alt="Adam McMahan" class="header-pic">
     <div class="header-text">
       <h1>Adam McMahan</h1>
       <p>Strategic Analyst | Graduate Member, British Psychological Society</p>
