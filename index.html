@@ -112,29 +112,24 @@
       margin-top: 1rem;
     }
 
-    .timeline {
-      position: relative;
-      margin: 2rem 0;
-      padding-left: 2rem;
-      border-left: 2px solid #ccc;
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+       margin-top: 1rem;
     }
 
-    .timeline-item {
-      margin-bottom: 2rem;
-      position: relative;
-    }
-
-    .timeline-date {
-      font-weight: bold;
-      color: #555;
-      margin-bottom: 0.5rem;
-    }
-
-    .timeline-content {
-      background: #fff;
-      padding: 1rem;
+    .skill-card {
+      background: #f0f4f8;
       border-radius: 8px;
+      padding: 1rem;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      text-align: left;
+      transition: transform 0.3s ease;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-5px);
     }
   </style>
 </head>
