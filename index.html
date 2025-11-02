@@ -136,16 +136,17 @@
 
     .timeline-scroll {
       overflow-x: auto;
+      overflow-y: hidden;
+      white-space: nowrap;
       padding: 2rem 0;
     }
 
     .timeline-track {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       position: relative;
       padding-top: 3rem;
       gap: 3rem;
-      min-width: 1600px;
     }
 
     .timeline-track::before {
