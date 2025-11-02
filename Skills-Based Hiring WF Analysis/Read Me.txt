@@ -1,0 +1,28 @@
+## Skills-Based Hiring in Workforce Analytics
+
+This project analyzes workforce data to explore the impact and adoption of skills-based 
+hiring practices. It investigates how organizations prioritize competencies over traditional 
+credentials and examines the relationship between skill emphasis, job outcomes, and 
+hiring trends.
+
+### Key Features
+- Data cleaning and schema validation for workforce datasets 
+- Classification of job postings by skill requirements versus degree requirements 
+- Trend analysis of skills-based hiring across industries and regions 
+- Visualization of hiring patterns, skill clusters, and temporal shifts 
+- Interpretation of policy implications and equity considerations
+
+### Tools Used
+- Python (Pandas, Numpy, Matplotlib, Seaborn) 
+- Jupyter Notebook 
+- GitHub for version control 
+
+### Files
+- `HRData.csv`: Cleaned dataset of job postings and hiring attributes 
+- `figures/`: Contains visualizations and plots 
+
+### Outcome
+This analysis provides insights into the evolution of hiring practices and highlights the 
+potential of skills-first approaches to improve access, reduce bias, and align talent with 
+opportunity. It supports strategic workforce planning and informs policy discussions 
+around inclusive hiring

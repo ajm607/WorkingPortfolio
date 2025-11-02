@@ -1,0 +1,30 @@
+## Starbucks Review Sentiment Analysis
+
+This project explores customer sentiment and star ratings from Starbucks reviews using 
+natural language processing (NLP) techniques. The goal is to uncover patterns in customer 
+feedback and assess how textual sentiment aligns with numerical ratings.
+
+### Key Features
+- **Data Cleaning & Preprocessing**: Tokenization, stopword removal, and lemmatization 
+of review text
+- **Sentiment Scoring**: Applied VADER to extract sentiment polarity and subjectivity
+- **Rating Alignment**: Compared sentiment scores with actual star ratings to identify 
+mismatches
+- **Visualization**: Plotted sentiment distributions, rating histograms, and confusion 
+matrix
+- **Insights**: Highlighted common themes in positive vs negative reviews and flagged 
+inconsistencies
+
+### Tools Used
+- Python (Pandas, NLTK, seaborn, matplotlib)
+- Jupyter Notebook
+- GitHub for version control
+
+### Files
+- `reviews_data.csv`: Raw review data
+- `sentiment_analysis.ipynb`: Main analysis notebook
+- `figures/`: Contains visualizations and plots
+
+### Outcome
+This analysis helps Starbucks and similar brands understand how customer language 
+reflects satisfaction, and where rating systems may fail to capture nuanced feedback.
