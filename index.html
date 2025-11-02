@@ -133,6 +133,35 @@
       transform: translateY(-5px);
       background: #d4e4f4;
     }
+
+    .timeline-marquee {
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 1rem 0;
+    }
+
+    .timeline-track {
+      display: inline-flex;
+      gap: 1rem;
+      animation: scroll-left 30s linear infinite;
+    }
+
+    .timeline-card {
+      background: #e6f0fa;
+      color: #1a1a1a;
+      border-radius: 8px;
+      padding: 1rem;
+      min-width: 250px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      flex-shrink: 0;
+      text-align: left;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
   </style>
 </head>
 <body>
@@ -207,6 +236,70 @@
     <div class="skill-card">
       <h3>Workflow Collaboration</h3>
       <p>Iterative editing, feedback-driven refinement</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Career & Education Timeline</h2>
+  <div class="timeline-marquee">
+    <div class="timeline-track">
+      <div class="timeline-card">
+        <h3>2006</h3>
+        <p>Attractions Host<br>The Walt Disney Company</p>
+      </div>
+      <div class="timeline-card">
+        <h3>2007</h3>
+        <p>Character Performer<br>The Walt Disney Company</p>
+      </div>
+      <div class="timeline-card">
+        <h3>2008</h3>
+        <p>Performer – Fantasmic!<br>The Walt Disney Company</p>
+      </div>
+      <div class="timeline-card">
+        <h3>2009</h3>
+        <p>Performer – Dream Along with Mickey<br>The Walt Disney Company</p>
+      </div>
+      <div class="timeline-card">
+        <h3>2011</h3>
+        <p>Stilt Walker – Festival of the Lion King<br>The Walt Disney Company</p>
+      </div>
+      <div class="timeline-card">
+        <h3>2016</h3>
+        <p>Operations Coordinator and Trainer<br>The Walt Disney Company</p>
+      </div>
+      <div class="timeline-card">
+        <h3>2018</h3>
+        <p>Associate of Arts in Psychology<br>Valencia College</p>
+      </div>
+      <div class="timeline-card">
+        <h3>2020</h3>
+        <p>Bachelor of Science in Psychology<br>Minor in Cognitive Science<br>University of Central Florida</p>
+      </div>
+      <div class="timeline-card">
+        <h3>2021</h3>
+        <p>Left Disney and moved to London<br>Expanded global perspective and career focus</p>
+      </div>
+      <div class="timeline-card">
+        <h3>2022</h3>
+        <p>Dissertation – Beyond Inclusion<br>Kingston University</p>
+      </div>
+      <div class="timeline-card">
+        <h3>2023</h3>
+        <p>Master of Science in Industrial Organizational Psychology<br>Kingston University</p>
+      </div>
+      <div class="timeline-card">
+        <h3>2024</h3>
+        <p>Guest Services Representative<br>The Walt Disney Company</p>
+      </div>
+      <div class="timeline-card">
+        <h3>2024</h3>
+        <p>Began Disney Aspire – MS in Data Science<br>Bellevue University</p>
+      </div>
+      <div class="timeline-card">
+        <h3>2025</h3>
+        <p>Graduate Research Analyst – People Insights<br>The Walt Disney Company</p>
+      </div>
     </div>
   </div>
 </section>
