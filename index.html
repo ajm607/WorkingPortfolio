@@ -134,32 +134,39 @@
       background: #d4e4f4;
     }
 
-    .timeline-marquee {
+    .timeline-horizontal {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      margin: 2rem 0;
+      padding: 2rem 0;
+      border-top: 4px solid white;
       overflow-x: auto;
-      white-space: nowrap;
-      padding: 1rem 0;
     }
 
-    .timeline-track {
-      display: inline-flex;
-      gap: 1rem;
-      animation: scroll-left 30s linear infinite;
+    .timeline-event {
+      position: relative;
+      text-align: center;
+      min-width: 120px;
     }
 
-    .timeline-card {
-      background: #e6f0fa;
+    .event-dot {
+      width: 16px;
+      height: 16px;
+      background-color: white;
+      border-radius: 50%;
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 0 4px #e6f0fa;
+    }
+
+    .event-info {
+      font-size: 0.9rem;
       color: #1a1a1a;
-      border-radius: 8px;
-      padding: 1rem;
-      min-width: 250px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      flex-shrink: 0;
-      text-align: left;
-    }
-
-    @keyframes scroll-left {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
+      margin-bottom: 2rem;
     }
 
   </style>
@@ -258,7 +265,7 @@
       </div>
       <div class="timeline-card">
         <h3>2009</h3>
-        <p>Performer – Dream Along with Mickey<br>The Walt Disney Company</p>
+        <p>Puppeteer – Dream Along with Mickey<br>The Walt Disney Company</p>
       </div>
       <div class="timeline-card">
         <h3>2011</h3>
