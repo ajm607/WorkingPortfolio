@@ -134,24 +134,28 @@
       background: #d4e4f4;
     }
 
-    .timeline-horizontal {
+    .scroll-container {
+      overflow-x: auto;
+      padding: 2rem 0;
+    }
+
+    .timeline-line {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       position: relative;
-      margin: 2rem 0;
-      padding: 2rem 0;
       border-top: 4px solid white;
-      overflow-x: auto;
+      padding-top: 2rem;
+      gap: 3rem;
+      min-width: 1200px;
     }
 
-    .timeline-event {
+    .timeline-point {
       position: relative;
-      text-align: center;
-      min-width: 120px;
+      flex-shrink: 0;
     }
 
-    .event-dot {
+    .timeline-point::before {
+      content: "";
       width: 16px;
       height: 16px;
       background-color: white;
@@ -163,10 +167,11 @@
       box-shadow: 0 0 0 4px #e6f0fa;
     }
 
-    .event-info {
-      font-size: 0.9rem;
+    .point-label {
+      text-align: center;
+      font-size: 0.85rem;
       color: #1a1a1a;
-      margin-bottom: 2rem;
+      max-width: 120px;
     }
 
   </style>
